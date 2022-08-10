@@ -105,8 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 // Question 3
-  void showResult3() {
-    List<int> listNums = [2, 3, 5, 8, 6];
+  void showResult3(List<int> listNums) {
     List<int> listResults = [];
 
     for (int i = 0; i < listNums.length; i++) {
