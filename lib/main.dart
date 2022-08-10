@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp());
@@ -64,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () => showString(controller2.text),
+              onPressed: showResult3,
               child: const Text("Show result 2"),
             ),
           ],
@@ -101,5 +102,27 @@ class _MyHomePageState extends State<MyHomePage> {
         content: Text("Is text symmetrical : $result"),
       ),
     );
+  }
+
+// Question 3
+  void showResult3() {
+    List<int> listNums = [2, 3, 5, 8, 6];
+    List<int> listResults = [];
+
+    for (int i = 0; i < listNums.length; i++) {
+      int lastIndex = listNums.length - 1;
+
+      if (i != lastIndex) {
+        int product = listNums[i] * listNums[i + 1];
+
+        listResults.add(product);
+      }
+    }
+
+    print(listResults);
+
+    int biggestMember = listResults.reduce(max);
+
+    print(biggestMember);
   }
 }
