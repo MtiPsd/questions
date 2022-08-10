@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: showResult3,
+              onPressed: () => showString(controller2.text),
               child: const Text("Show result 2"),
             ),
           ],
