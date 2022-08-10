@@ -1,27 +1,105 @@
+import 'package:flutter/material.dart';
+
 void main() {
-  int answer1 = getCentury(501);
-
-  print("Answer 1 is: $answer1");
-
-  bool answer2 = showString("aaabaaaa");
-
-  print("Answer 2 is: $answer2");
+  runApp(const MyApp());
 }
 
-// Question 1
-int getCentury(int years) {
-  double number = years / 100;
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
-  int century = number.ceil();
-
-  return century;
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(),
+    );
+  }
 }
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final TextEditingController controller1 = TextEditingController();
+  final TextEditingController controller2 = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(""),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(50.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TextField(
+              controller: controller1,
+              decoration: const InputDecoration(
+                hintText: "Enter Year",
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              controller: controller2,
+              decoration: const InputDecoration(
+                hintText: "Enter Your Text",
+              ),
+            ),
+            const SizedBox(height: 50.0),
+            ElevatedButton(
+              onPressed: () => getCentury(
+                int.parse(controller1.text),
+                context,
+              ),
+              child: const Text("Show result 1"),
+            ),
+            const SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () => showString(controller2.text),
+              child: const Text("Show result 2"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Question 1
+  void getCentury(int years, BuildContext context) {
+    double number = years / 100;
+
+    int century = number.ceil();
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => AlertDialog(
+        content: Text("number of century is : $century"),
+      ),
+    );
+  }
 
 // Question 2
-bool showString(String text) {
-  String reversed = text.split("").reversed.join();
+  void showString(String text) {
+    String reversed = text.split("").reversed.join();
 
-  bool result = reversed == text;
+    bool result = reversed == text;
 
-  return result;
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => AlertDialog(
+        content: Text("Is text symmetrical : $result"),
+      ),
+    );
+  }
 }
