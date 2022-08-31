@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -29,6 +31,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController controller1 = TextEditingController();
   final TextEditingController controller2 = TextEditingController();
+  final TextEditingController controller3 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +58,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 hintText: "Enter Your Text",
               ),
             ),
+            TextField(
+              controller: controller3,
+              decoration: const InputDecoration(
+                hintText: "Enter a number",
+              ),
+              keyboardType: TextInputType.number,
+            ),
             const SizedBox(height: 50.0),
             ElevatedButton(
               onPressed: () => getCentury(
@@ -68,13 +78,22 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => showString(controller2.text),
               child: const Text("Show result 2"),
             ),
+            const SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () => showResult3(
+                context,
+                num: int.parse(controller3.text.trim()),
+              ),
+              child: const Text("Show result 3"),
+            ),
           ],
         ),
       ),
     );
   }
 
-  // Question 1
+  // **************** Question 1 ****************
+
   void getCentury(int years, BuildContext context) {
     double number = years / 100;
 
@@ -89,7 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-// Question 2
+  // **************** Question 2 ****************
+
   void showString(String text) {
     String reversed = text.split("").reversed.join();
 
@@ -104,24 +124,83 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-// Question 3
-  void showResult3(List<int> listNums) {
+  // **************** Question 3 ****************
+
+  Future<void> showResult3(BuildContext context, {required int num}) async {
+    List<int> listNums = [];
     List<int> listResults = [];
+    listNums.add(num);
+
+    controller3.clear();
+    await customDialoge(
+      listNums: listNums,
+      context: context,
+    );
 
     for (int i = 0; i < listNums.length; i++) {
       int lastIndex = listNums.length - 1;
 
       if (i != lastIndex) {
         int product = listNums[i] * listNums[i + 1];
-
         listResults.add(product);
       }
     }
-
-    print(listResults);
-
     int biggestMember = listResults.reduce(max);
 
-    print(biggestMember);
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => AlertDialog(
+        content: Text("Biggest member is $biggestMember"),
+      ),
+    );
+  }
+
+  Future<void> customDialoge({
+    required List<int> listNums,
+    required BuildContext context,
+    String text = "Add a new number ?",
+  }) async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: const Text("Question 3"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(text),
+                TextField(
+                  controller: controller3,
+                  decoration: const InputDecoration(),
+                  keyboardType: TextInputType.number,
+                )
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  listNums.add(int.parse(controller3.text.trim()));
+                  controller3.clear();
+                },
+                child: const Text('Add'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                  ),
+                ),
+              )
+            ],
+          );
+        });
   }
 }
